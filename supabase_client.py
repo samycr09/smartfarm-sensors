@@ -4,6 +4,8 @@
 import urequests
 import ujson
 
+from config import SUPABASE_KEY, SUPABASE_URL, SENSOR_TABLE
+
 # ── Common headers ────────────────────────────────────────────────────────────
 
 HEADERS = {
@@ -18,10 +20,9 @@ HEADERS = {
 def post_reading(
     soil_adc,
     water_level_adc,
-    water_threshold,
     buzzer_status
 ):
-    url = "{}/rest/v1/{}".format(
+    url = "{}{}".format(
         SUPABASE_URL,
         SENSOR_TABLE
     )
@@ -29,7 +30,6 @@ def post_reading(
     payload = {
         "soil_adc": soil_adc,
         "water_level_adc": water_level_adc,
-        "water_threshold": water_threshold,
         "buzzer_status": buzzer_status
     }
 
@@ -52,7 +52,7 @@ def post_reading(
 def get_readings(limit=5):
 
     url = (
-        "{}/rest/v1/{}"
+        "{}{}"
         "?select=*"
         "&order=created_at.desc"
         "&limit={}"
